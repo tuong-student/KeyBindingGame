@@ -4,26 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameInput : NOOD.MonoBehaviorInstance<GameInput>
+namespace Game.System
 {
-    public EventHandler<Vector2> OnPlayerMove;
-    public GameInputSystem gameInputSystem;
-
-    private void Awake() 
+    public class GameInput : NOOD.MonoBehaviorInstance<GameInput>
     {
-        gameInputSystem = new GameInputSystem();
-        gameInputSystem.Player.Enable();
+        public EventHandler<Vector2> OnPlayerMove;
+        public GameInputSystem gameInputSystem;
 
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+        private void Awake() 
+        {
+            gameInputSystem = new GameInputSystem();
+            gameInputSystem.Player.Enable();
 
-    private void Update() 
-    {
-        Vector2 direction = gameInputSystem.Player.Move.ReadValue<Vector2>();
-        OnPlayerMove?.Invoke(this, direction);
+        }
+        // Start is called before the first frame update
+        void Start()
+        {
+        }
+
+        private void Update() 
+        {
+            Vector2 direction = gameInputSystem.Player.Move.ReadValue<Vector2>();
+            OnPlayerMove?.Invoke(this, direction);
+        }   
     }
-    
 }
