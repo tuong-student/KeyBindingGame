@@ -1,5 +1,5 @@
 {
-    "name": "GameInputSystyem",
+    "name": "GameInputSystem",
     "maps": [
         {
             "name": "Player",
@@ -45,6 +45,15 @@
                     "name": "SwordAttack",
                     "type": "Button",
                     "id": "eff49300-cce6-4f08-b9c8-cb13737f0c83",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "18b2abf2-0c2e-443b-b211-388ccefd27d2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -148,6 +157,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SwordAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37949a46-6d56-4028-921c-281acd66f2fd",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
