@@ -260,6 +260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 630460975}
+  - component: {fileID: 630460976}
   m_Layer: 0
   m_Name: PlayerVisual
   m_TagString: Untagged
@@ -283,6 +284,20 @@ Transform:
   m_Father: {fileID: 1241839547}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &630460976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630460974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 954926103e5124462ab93579a2fe7513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 680129800}
+  sr: {fileID: 680129798}
 --- !u!1 &680129797
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,7 +393,7 @@ Animator:
   m_GameObject: {fileID: 680129797}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d2b6767d9bc2e8f41910d46d35a1dad7, type: 2}
+  m_Controller: {fileID: 9100000, guid: bec6bfc19f1564aca9a26e70785db737, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -404,7 +419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &994168417
 Grid:
   m_ObjectHideFlags: 0
