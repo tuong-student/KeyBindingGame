@@ -11,6 +11,7 @@ namespace Game.System
         public EventHandler<Vector2> OnPlayerMove;
         public GameInputSystem gameInputSystem;
 
+
         private void Awake() 
         {
             gameInputSystem = new GameInputSystem();

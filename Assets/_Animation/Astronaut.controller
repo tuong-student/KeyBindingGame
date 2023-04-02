@@ -11,6 +11,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: IsWalking
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsHolding
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown
     m_EventTreshold: -1
@@ -142,6 +145,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: IsHolding
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsWalking
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown
@@ -433,6 +439,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: IsHolding
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsWalking
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown
     m_EventTreshold: 1
@@ -655,6 +664,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: IsWalking
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsHolding
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown
     m_EventTreshold: 0
@@ -682,6 +694,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: IsHolding
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsWalking
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown
@@ -814,6 +829,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: IsWalking
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsHolding
     m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: UpSideDown

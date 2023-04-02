@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace Game.Player
 {
     public class Player : MonoBehaviour
     {
+        private int _PLAYER_LAYER;
+        public int PLAYER_LAYER => _PLAYER_LAYER;
         [SerializeField] private PlayerVisual playerVisual;
 
         [SerializeField] private float speed = 5f;
@@ -20,12 +23,20 @@ namespace Game.Player
         [SerializeField] private Animator currentItemAnimator;
         private Game.Interface.Iitem currentItem;
 
+        public EventHandler OnPlayerPickUp;
+
         // Start is called before the first frame update
         void Start()
         {
             GameInput.GetInstance.OnPlayerMove += Move;
             GameInput.GetInstance.gameInputSystem.Player.Dash.performed += (InputAction) => Dash();
             
+            GameInput.GetInstance.gameInputSystem.Player.Pickup.performed += (InputAction.CallbackContext callbackContext) =>
+            {
+                PickUp();
+            };
+
+            _PLAYER_LAYER = playerVisual.GetSortingLayer();
         }
 
         // Update is called once per frame
@@ -60,7 +71,9 @@ namespace Game.Player
         {
             if(groundItem != null)
             {
-                groundItem.Pickup(this);
+                groundItem.PickUp(this);
+                Carrying();
+                OnPlayerPickUp?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -70,15 +83,19 @@ namespace Game.Player
             // When attack player will stop    
         }
 
-        public void Carry(Game.Item.Bomb bomb)
+        public void Carrying()
         {
             playerVisual.SetIsHolding(true);
-            playerVisual.SetActiveCover(true);
         }
 
         public void Throw()
         {
             playerVisual.SetIsHolding(false);
+        }
+
+        public void SetGroundItem(Game.Interface.Iitem item)
+        {
+            groundItem = item;
         }
 
         public void SetCurrentItem(Game.Interface.Iitem item)
@@ -87,12 +104,15 @@ namespace Game.Player
             {
                 SetCurrentItemAnimator(null);
             }
-            this.currentItem = item;
+            else
+            {
+                this.currentItem = item;
+            }
         }
 
         public void SetCurrentItemAnimator(Animator animator)
         {
-            this.currentItemAnimator = animator;
+            this.currentItemAnimator.runtimeAnimatorController = animator.runtimeAnimatorController;
         }
     }
 }

@@ -24,6 +24,11 @@ namespace Game.Player
             GameInput.GetInstance.OnPlayerMove += Animate;
         }
 
+        public int GetSortingLayer()
+        {
+            return sr.sortingOrder;
+        }
+
         public void SetActiveCover(bool isActive)
         {
             coverAnim.gameObject.SetActive(isActive);
@@ -31,7 +36,33 @@ namespace Game.Player
 
         public void SetIsHolding(bool isHolding)
         {
+            SetActiveCover(isHolding);
             this.isHolding = isHolding;
+            anim.SetBool("IsHolding", isHolding);
+            coverAnim.SetBool("IsHolding", isHolding);
+        }
+
+        public void SetIsWalking(bool isWalking)
+        {
+            anim.SetBool("IsWalking", isWalking);
+            if(isHolding)
+            {
+                coverAnim.SetBool("IsWalking", isWalking);
+            }
+        }
+
+        private void FlipX(bool isLeft)
+        {
+            Vector3 scale = this.transform.parent.transform.localScale;
+            if(isLeft)
+            {
+                scale.x = 1;
+            }
+            else
+            {
+                scale.x = -1;
+            }
+            this.transform.parent.transform.localScale = scale;
         }
 
         private void Animate(object sender, Vector2 playerInput)
@@ -39,45 +70,40 @@ namespace Game.Player
             // Normal movement
             if(playerInput == Vector2.zero)
             {
-                anim.SetBool("IsWalking", false);
-                if(isHolding)
-                {
-                    coverAnim.SetBool("IsWalking", false);
-                }
+                SetIsWalking(false);
             }
             else
             {
-                anim.SetBool("IsWalking", true);
-                if(isHolding)
-                {
-                    coverAnim.SetBool("IsWalking", true);
-                }
+                SetIsWalking(true);
             }
 
             // Side the player sprite left right
             if(playerInput.x < 0)
             {
-                sr.flipX = false;
-                coverSr.flipX = false;
+                FlipX(true);
+                if(isHolding)
+                {
+                    SetIsHolding(true);
+                }
             }
             else if(playerInput.x > 0)
             {
-                sr.flipX = true;
-                coverSr.flipX = true;
+                FlipX(false);
+                if(isHolding)
+                {
+                    SetIsHolding(true);
+                }
             }
 
             // Side player sprite up down
-            if(playerInput.y != 0)
+            if(playerInput != Vector2.zero)
             {
                 anim.SetInteger("UpSideDown", (int) playerInput.y);
                 if(coverAnim.enabled == true)
                     coverAnim.SetInteger("UpSideDown", (int)playerInput.y);
-            }
-            else if(playerInput.x != 0)
-            {
-                anim.SetInteger("UpSideDown", (int) playerInput.y);
-                if(coverAnim.enabled == true)
-                    coverAnim.SetInteger("UpSideDown", (int)playerInput.y);
+
+                if(playerInput.y != 0 && playerInput.x == 0)
+                    SetActiveCover(false);
             }
         }
     }
