@@ -16,7 +16,7 @@ namespace Game.Item
 
         void Start()
         {
-            GameInput.GetInstance.OnPlayerMove += Animate;
+            SingletonContainer.Resolve<GameInput>().OnPlayerMove += Animate;
             sr.sortingOrder = 0;
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.System;
+using Game.Interface;
 
 namespace Game.Player
 {
@@ -25,15 +26,26 @@ namespace Game.Player
 
         public EventHandler OnPlayerPickUp;
 
+        #region Instance
+        GameInput gameInputInstance;
+        #endregion
+
         // Start is called before the first frame update
         void Start()
         {
-            GameInput.GetInstance.OnPlayerMove += Move;
-            GameInput.GetInstance.gameInputSystem.Player.Dash.performed += (InputAction) => Dash();
-            
-            GameInput.GetInstance.gameInputSystem.Player.Pickup.performed += (InputAction.CallbackContext callbackContext) =>
+            gameInputInstance = SingletonContainer.Resolve<GameInput>();
+            SingletonContainer.Resolve<GameManager>();
+            gameInputInstance.OnPlayerMove += Move;
+            gameInputInstance.gameInputSystem.Player.Dash.performed += (InputAction) => Dash();
+
+            gameInputInstance.gameInputSystem.Player.Pickup.performed += (InputAction.CallbackContext callbackContext) =>
             {
                 PickUp();
+            };
+
+            gameInputInstance.gameInputSystem.Player.Throw.performed += (InputAction.CallbackContext callbackContext) =>
+            {
+                Throw();
             };
 
             _PLAYER_LAYER = playerVisual.GetSortingLayer();
@@ -45,6 +57,15 @@ namespace Game.Player
             if(dashTimer > 0f) 
             {
                 dashTimer -= Time.deltaTime;
+            }
+        }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            Iitem temp = other.gameObject.GetComponent<Iitem>();
+            if(temp != null)
+            {
+                SetGroundItem(temp);
             }
         }
 
@@ -72,6 +93,7 @@ namespace Game.Player
             if(groundItem != null)
             {
                 groundItem.PickUp(this);
+                SetCurrentItem(groundItem);
                 Carrying();
                 OnPlayerPickUp?.Invoke(this, EventArgs.Empty);
             }
@@ -83,36 +105,26 @@ namespace Game.Player
             // When attack player will stop    
         }
 
-        public void Carrying()
+        private void Carrying()
         {
             playerVisual.SetIsHolding(true);
         }
 
-        public void Throw()
+        private void Throw()
         {
+            currentItem.Throw();
             playerVisual.SetIsHolding(false);
         }
 
-        public void SetGroundItem(Game.Interface.Iitem item)
+        private void SetGroundItem(Game.Interface.Iitem item)
         {
             groundItem = item;
         }
 
-        public void SetCurrentItem(Game.Interface.Iitem item)
+        private void SetCurrentItem(Game.Interface.Iitem item)
         {
-            if(item == null)
-            {
-                SetCurrentItemAnimator(null);
-            }
-            else
-            {
-                this.currentItem = item;
-            }
-        }
-
-        public void SetCurrentItemAnimator(Animator animator)
-        {
-            this.currentItemAnimator.runtimeAnimatorController = animator.runtimeAnimatorController;
+            this.currentItem = item;
+            
         }
     }
 }

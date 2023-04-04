@@ -21,7 +21,7 @@ namespace Game.Player
 
         void Start()
         {
-            GameInput.GetInstance.OnPlayerMove += Animate;
+            SingletonContainer.Resolve<GameInput>().OnPlayerMove += Animate;
         }
 
         public int GetSortingLayer()

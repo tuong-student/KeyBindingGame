@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Interface;
 using Game.System;
+using DG.Tweening;
 
 namespace Game.Item
 {
@@ -17,13 +18,11 @@ namespace Game.Item
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            Player.Player player = other.GetComponent<Player.Player>();
-            if(player != null)
+            Player.Player temp = other.GetComponent<Player.Player>();
+            if(temp != null)
             {
-                player.SetGroundItem(this);
-                bombVisual.SetPlayer(player);
+                bombVisual.SetPlayer(temp);
             }
-            Debug.Log("OnTriggerEnter2D" + player);
         }
 
         public void Interact(Player.Player player)
@@ -39,7 +38,7 @@ namespace Game.Item
 
             bombVisual.SetIsHold(true);
 
-            GameInput.GetInstance.OnPlayerMove += (object sender, Vector2 move) =>
+            SingletonContainer.Resolve<GameInput>().OnPlayerMove += (object sender, Vector2 move) =>
             {
                 if(move != Vector2.zero)
                     bombVisual.SetIsCarry(true);
@@ -50,8 +49,19 @@ namespace Game.Item
 
         public void Throw()
         {
+            ThrowMovement(this.transform.position + new Vector3(7, 0, 0));
             bombVisual.SetIsCarry(false);
             bombVisual.SetIsHold(false);
+            this.transform.parent = null;
+        }
+
+        public void ThrowMovement(Vector2 destination)
+        {
+            float xDistance = this.transform.position.x - destination.x;
+            xDistance = Mathf.Abs(xDistance);
+            float xTime = xDistance * 0.1f;
+            this.transform.DOMoveX(destination.x, xTime);
+            this.transform.DOMoveY(this.transform.position.y + 0.5f, xTime * 2f/5f).SetEase(Ease.OutFlash).OnComplete(() => this.transform.DOMoveY(this.transform.position.y - 0.5f,xTime * 1f/5f).SetEase(Ease.InFlash));
         }
     }
 }
