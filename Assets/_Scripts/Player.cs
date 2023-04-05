@@ -19,11 +19,16 @@ namespace Game.Player
         [SerializeField] private float throwPower = 7f;
         private Vector3 moveDirection;
         private float dashTimer;
+        private Vector2 faceDirection;
+        #endregion
+        //----------------------------------------------------------------//
+        #region Bool
+        private bool isAttacking;
         #endregion
         //----------------------------------------------------------------//
         #region Reference
-        [SerializeField] private Animator currentItemAnimator;
         [SerializeField] private PlayerVisual playerVisual;
+        [SerializeField] private Game.Item.Sword sword;
         private Game.Item.BaseItem groundItem;
         private Game.Item.BaseItem currentItem;
         #endregion
@@ -40,6 +45,12 @@ namespace Game.Player
         //----------------------------------------------------------------//
 
         //--- Unity Functions ---//
+
+        void Awake()
+        {
+            _PLAYER_LAYER = playerVisual.GetSortingLayer();            
+        }
+
         void Start()
         {
             gameInputInstance = SingletonContainer.Resolve<GameInput>();
@@ -47,17 +58,19 @@ namespace Game.Player
             gameInputInstance.OnPlayerMove += Move;
             gameInputInstance.gameInputSystem.Player.Dash.performed += (InputAction) => Dash();
 
-            gameInputInstance.gameInputSystem.Player.Pickup.performed += (InputAction.CallbackContext callbackContext) =>
+            gameInputInstance.gameInputSystem.Player.PickupOrThrow.performed += (InputAction.CallbackContext callbackContext) =>
             {
-                PickUp();
+                if(IsHasCurrentItem() == false)
+                {
+                   PickUp();
+                }
+                else
+                {
+                    Throw();
+                }
             };
 
-            gameInputInstance.gameInputSystem.Player.Throw.performed += (InputAction.CallbackContext callbackContext) =>
-            {
-                Throw();
-            };
-
-            _PLAYER_LAYER = playerVisual.GetSortingLayer();
+            gameInputInstance.gameInputSystem.Player.SwordAttack.performed += (InputAction.CallbackContext callbackContext) => Attack();
         }
 
         void Update()
@@ -82,7 +95,11 @@ namespace Game.Player
         {
             Vector3 playerMovement = new Vector3(movement.x, movement.y, 0);
             this.transform.position += playerMovement * speed * Time.deltaTime;
-            moveDirection = playerMovement;
+            moveDirection = movement;
+            if(movement != Vector2.zero)
+            {
+                this.faceDirection = movement;
+            }
         }
 
         private void Dash()
@@ -99,7 +116,7 @@ namespace Game.Player
 
         private void PickUp()
         {
-            if(groundItem != null)
+            if(groundItem != null && IsHasCurrentItem() == false)
             {
                 SetIsHoldingTrue();
                 groundItem.PickUp(this);
@@ -110,8 +127,26 @@ namespace Game.Player
 
         private void Attack()
         {
-            playerVisual.SetActiveCover(true);
-            // When attack player will stop    
+            playerVisual.SetCoverActivation(true);
+            // When attack player will stop   
+            SetIsAttacking(true);
+            playerVisual.ActiveCoverSwordAttack();
+            sword.Attack();
+        }
+
+        public float GetSwordAttackTime()
+        {
+            return sword.GetAttackTime();
+        }
+
+        public Vector2 GetFaceDirection()
+        {
+            return this.faceDirection;
+        }
+
+        public void SetIsAttacking(bool isAttacking)
+        {
+            this.isAttacking = isAttacking;
         }
 
         private void SetIsHoldingTrue()
@@ -121,7 +156,7 @@ namespace Game.Player
 
         private void Throw()
         {
-            if(IsCurrentItem())
+            if(IsHasCurrentItem())
             {
                 playerVisual.Throw();
                 currentItem.Throw(this.throwPower);
@@ -145,7 +180,7 @@ namespace Game.Player
             return this.currentItem;
         }
 
-        public bool IsCurrentItem()
+        public bool IsHasCurrentItem()
         {
             return this.currentItem != null;   
         }

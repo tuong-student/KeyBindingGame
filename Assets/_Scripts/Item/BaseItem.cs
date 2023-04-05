@@ -8,10 +8,10 @@ namespace Game.Item
 {
     public class BaseItem : MonoBehaviour, Game.Interface.Iitem
     {
-        [SerializeField] private BaseItemVisual itemVisual;
+        [SerializeField] protected BaseItemVisual itemVisual;
         private Vector3 faceDirection;
 
-        void Start()
+        protected virtual void Start()
         {
             SingletonContainer.Resolve<GameInput>().OnPlayerMove += SetDirection;
         }

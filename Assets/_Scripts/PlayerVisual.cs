@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.System;
+using NOOD;
 
 namespace Game.Player
 {
     public class PlayerVisual : MonoBehaviour
     {
+        [SerializeField] private Player player;
+
         [SerializeField] private Animator anim;
         [SerializeField] private Animator coverAnim;
 
@@ -34,14 +37,31 @@ namespace Game.Player
             anim.SetTrigger("Throw");
         }
 
-        public void SetActiveCover(bool isActive)
+        public void SetCoverActivation(bool isActive)
         {
             coverAnim.gameObject.SetActive(isActive);
         }
 
+        public void ActiveCoverSwordAttack()
+        {
+            SetCoverActivation(true);
+            anim.SetBool("AttackSword", true);
+            coverAnim.SetBool("AttackSword", true);
+            coverAnim.SetInteger("UpSideDown", (int) player.GetFaceDirection().y);
+
+            float attackTime = player.GetSwordAttackTime();
+            NoodyCustomCode.StartDelayFunction(() => 
+            { 
+                SetCoverActivation(false); 
+                anim.SetBool("AttackSword", false);
+                coverAnim.SetBool("AttackSword", false);
+                Debug.Log(player.GetSwordAttackTime());
+            }, attackTime);
+        }
+
         public void SetIsHolding(bool isHolding)
         {
-            SetActiveCover(isHolding);
+            SetCoverActivation(isHolding);
             this.isHolding = isHolding;
             anim.SetBool("IsHolding", isHolding);
             coverAnim.SetBool("IsHolding", isHolding);
@@ -108,7 +128,7 @@ namespace Game.Player
                     coverAnim.SetInteger("UpSideDown", (int)playerInput.y);
 
                 if(playerInput.y != 0 && playerInput.x == 0)
-                    SetActiveCover(false);
+                    SetCoverActivation(false);
             }
         }
     }

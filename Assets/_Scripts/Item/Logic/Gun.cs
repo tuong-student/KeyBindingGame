@@ -8,13 +8,18 @@ namespace Game.Item
 {
     public class Gun : BaseItem 
     {
-        [SerializeField] private GunVisual gunVisual;
+        private GunVisual gunVisual;
 
+        protected override void Start()
+        {
+            base.Start();
+            gunVisual = (GunVisual)itemVisual;
+        }
 
         private void Fire()
         {
             // Play fire animation
-
+            gunVisual.PlayAnimationShoot();
             // Fire a bullet
         }
     }

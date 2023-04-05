@@ -7,24 +7,24 @@ namespace Game.Item
 {
     public class BaseItemVisual : MonoBehaviour
     {
-        [SerializeField] private Animator anim;
-        [SerializeField] private BaseItem baseItemScript;
-        [SerializeField] private SpriteRenderer sr;
+        [SerializeField] protected BaseItem baseItemScript;
+        [SerializeField] protected Animator anim;
+        [SerializeField] protected SpriteRenderer sr;
         private Player.Player player;
         private bool isHolding = false;
 
-        void Start()
+        protected virtual void Start()
         {
             SingletonContainer.Resolve<GameInput>().OnPlayerMove += Animate;
             sr.sortingOrder = 0;
         }
 
-        public void SetIsCarry(bool isCarry)
+        public virtual void SetIsCarry(bool isCarry)
         {
             anim.SetBool("IsCarry", isCarry);
         }
 
-        public void SetIsHold(bool isHold)
+        public virtual void SetIsHold(bool isHold)
         {
             isHolding = isHold;
             anim.SetBool("IsHold", isHold);
@@ -43,7 +43,7 @@ namespace Game.Item
             this.player = player;
         }
 
-        private void Animate(object sender, Vector2 movement)
+        protected virtual void Animate(object sender, Vector2 movement)
         {
             if (movement != Vector2.zero)
             {
