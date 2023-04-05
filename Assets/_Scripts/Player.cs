@@ -12,25 +12,34 @@ namespace Game.Player
     {
         private int _PLAYER_LAYER;
         public int PLAYER_LAYER => _PLAYER_LAYER;
-        [SerializeField] private PlayerVisual playerVisual;
-
+        //----------------------------------------------------------------//
+        #region Digit
         [SerializeField] private float speed = 5f;
-        private Vector3 moveDirection;
-
         [SerializeField] private float dashCoolDown = 1f;
+        [SerializeField] private float throwPower = 7f;
+        private Vector3 moveDirection;
         private float dashTimer;
-
-        private Game.Interface.Iitem groundItem;
+        #endregion
+        //----------------------------------------------------------------//
+        #region Reference
         [SerializeField] private Animator currentItemAnimator;
-        private Game.Interface.Iitem currentItem;
-
+        [SerializeField] private PlayerVisual playerVisual;
+        private Game.Item.BaseItem groundItem;
+        private Game.Item.BaseItem currentItem;
+        #endregion
+        //----------------------------------------------------------------//
+        #region Event
         public EventHandler OnPlayerPickUp;
-
+        #endregion
+        //----------------------------------------------------------------//
         #region Instance
         GameInput gameInputInstance;
         #endregion
 
-        // Start is called before the first frame update
+        //----------------------------------------------------------------//
+        //----------------------------------------------------------------//
+
+        //--- Unity Functions ---//
         void Start()
         {
             gameInputInstance = SingletonContainer.Resolve<GameInput>();
@@ -51,7 +60,6 @@ namespace Game.Player
             _PLAYER_LAYER = playerVisual.GetSortingLayer();
         }
 
-        // Update is called once per frame
         void Update()
         {
             if(dashTimer > 0f) 
@@ -62,13 +70,14 @@ namespace Game.Player
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            Iitem temp = other.gameObject.GetComponent<Iitem>();
+            Game.Item.BaseItem temp = other.gameObject.GetComponent<Game.Item.BaseItem>();
             if(temp != null)
             {
                 SetGroundItem(temp);
             }
         }
 
+        //--- Custom Functions ---//
         private void Move(object sender, Vector2 movement)
         {
             Vector3 playerMovement = new Vector3(movement.x, movement.y, 0);
@@ -92,9 +101,9 @@ namespace Game.Player
         {
             if(groundItem != null)
             {
+                SetIsHoldingTrue();
                 groundItem.PickUp(this);
                 SetCurrentItem(groundItem);
-                Carrying();
                 OnPlayerPickUp?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -105,26 +114,40 @@ namespace Game.Player
             // When attack player will stop    
         }
 
-        private void Carrying()
+        private void SetIsHoldingTrue()
         {
             playerVisual.SetIsHolding(true);
         }
 
         private void Throw()
         {
-            currentItem.Throw();
-            playerVisual.SetIsHolding(false);
+            if(IsCurrentItem())
+            {
+                playerVisual.Throw();
+                currentItem.Throw(this.throwPower);
+                playerVisual.SetIsHolding(false);
+                SetCurrentItem(null);
+            }
         }
 
-        private void SetGroundItem(Game.Interface.Iitem item)
+        private void SetGroundItem(Game.Item.BaseItem item)
         {
             groundItem = item;
         }
 
-        private void SetCurrentItem(Game.Interface.Iitem item)
+        private void SetCurrentItem(Game.Item.BaseItem item)
         {
             this.currentItem = item;
-            
+        }
+
+        public Iitem GetCurrentItem()
+        {
+            return this.currentItem;
+        }
+
+        public bool IsCurrentItem()
+        {
+            return this.currentItem != null;   
         }
     }
 }

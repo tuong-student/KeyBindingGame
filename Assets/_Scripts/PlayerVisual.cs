@@ -29,6 +29,11 @@ namespace Game.Player
             return sr.sortingOrder;
         }
 
+        public void Throw()
+        {
+            anim.SetTrigger("Throw");
+        }
+
         public void SetActiveCover(bool isActive)
         {
             coverAnim.gameObject.SetActive(isActive);

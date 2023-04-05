@@ -9,6 +9,6 @@ namespace Game.Interface
     {
         void Interact(Game.Player.Player player);
         void PickUp(Game.Player.Player player);
-        void Throw();
+        void Throw(float throwPower);
     }
 }
