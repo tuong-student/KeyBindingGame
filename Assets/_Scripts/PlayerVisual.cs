@@ -55,7 +55,6 @@ namespace Game.Player
                 SetCoverActivation(false); 
                 anim.SetBool("AttackSword", false);
                 coverAnim.SetBool("AttackSword", false);
-                Debug.Log(player.GetSwordAttackTime());
             }, attackTime);
         }
 

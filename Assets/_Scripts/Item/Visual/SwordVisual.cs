@@ -23,6 +23,7 @@ namespace Game.Item
             if(faceDirection.y > 0)
             {
                 anim.SetInteger("UpSideDown", 1);
+                sr.sortingOrder = player.PLAYER_LAYER - 1;
             }
             else if(faceDirection.y < 0)
             {
@@ -49,16 +50,19 @@ namespace Game.Item
             return 0.5833334f;
         }
 
-        private void SetFaceDirection(object sender, Vector2 direction)
-        {
-            if(direction != Vector2.zero)
+        private void SetFaceDirection(object sender, Vector2 direction) { if(direction != Vector2.zero)
             {
                 if(direction.x == 0)
                 {
                     this.faceDirection = direction;
+                    if(direction.y > 0)
+                        sr.sortingOrder = player.PLAYER_LAYER + 1;
+                    else
+                        sr.sortingOrder = player.PLAYER_LAYER - 1;
                 }
                 else
                 {
+                    sr.sortingOrder = player.PLAYER_LAYER - 1;
                     this.faceDirection = new Vector2(direction.x, 0);
                 }
             }

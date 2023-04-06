@@ -71,6 +71,15 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BindingKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f1b1240-68ae-4876-a8ab-c182e3fed0c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""451cf9e0-cf3f-4b1a-ac00-e807c1de254a"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BindingKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +205,7 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_BindingKey = m_Player.FindAction("BindingKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,6 +270,7 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_SwordAttack;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_BindingKey;
     public struct PlayerActions
     {
         private @GameInputSystem m_Wrapper;
@@ -258,6 +280,7 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @BindingKey => m_Wrapper.m_Player_BindingKey;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,6 +305,9 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                 @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @BindingKey.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
+                @BindingKey.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
+                @BindingKey.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -301,6 +327,9 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @BindingKey.started += instance.OnBindingKey;
+                @BindingKey.performed += instance.OnBindingKey;
+                @BindingKey.canceled += instance.OnBindingKey;
             }
         }
     }
@@ -312,5 +341,6 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnSwordAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnBindingKey(InputAction.CallbackContext context);
     }
 }
