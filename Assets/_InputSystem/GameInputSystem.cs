@@ -37,7 +37,7 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pickup"",
+                    ""name"": ""PickupOrThrow"",
                     ""type"": ""Button"",
                     ""id"": ""890d6165-552a-48df-8eeb-776ea28a8d45"",
                     ""expectedControlType"": ""Button"",
@@ -46,16 +46,7 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Throw"",
-                    ""type"": ""Button"",
-                    ""id"": ""a0267975-8b6b-46d4-8b44-15763062f281"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""HammerAttack"",
+                    ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""b9d6b093-f2ce-4b54-93a1-b14c8951fbe3"",
                     ""expectedControlType"": ""Button"",
@@ -76,6 +67,15 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""18b2abf2-0c2e-443b-b211-388ccefd27d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BindingKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f1b1240-68ae-4876-a8ab-c182e3fed0c2"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -141,22 +141,11 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""fd0420c7-5041-4925-bca0-b7bd1d7f9b25"",
-                    ""path"": ""<Keyboard>/j"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pickup"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""68d96eae-4e67-490e-866c-9fa049d960a5"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Throw"",
+                    ""action"": ""PickupOrThrow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -167,14 +156,14 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""HammerAttack"",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""a78c8a1f-02e2-4ad3-93cd-5e71a24aee63"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -192,6 +181,17 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""451cf9e0-cf3f-4b1a-ac00-e807c1de254a"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BindingKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -201,11 +201,11 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
-        m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
-        m_Player_HammerAttack = m_Player.FindAction("HammerAttack", throwIfNotFound: true);
+        m_Player_PickupOrThrow = m_Player.FindAction("PickupOrThrow", throwIfNotFound: true);
+        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_SwordAttack = m_Player.FindAction("SwordAttack", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_BindingKey = m_Player.FindAction("BindingKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -266,21 +266,21 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Pickup;
-    private readonly InputAction m_Player_Throw;
-    private readonly InputAction m_Player_HammerAttack;
+    private readonly InputAction m_Player_PickupOrThrow;
+    private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_SwordAttack;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_BindingKey;
     public struct PlayerActions
     {
         private @GameInputSystem m_Wrapper;
         public PlayerActions(@GameInputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Pickup => m_Wrapper.m_Player_Pickup;
-        public InputAction @Throw => m_Wrapper.m_Player_Throw;
-        public InputAction @HammerAttack => m_Wrapper.m_Player_HammerAttack;
+        public InputAction @PickupOrThrow => m_Wrapper.m_Player_PickupOrThrow;
+        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @SwordAttack => m_Wrapper.m_Player_SwordAttack;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @BindingKey => m_Wrapper.m_Player_BindingKey;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -293,21 +293,21 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
-                @Pickup.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Pickup.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Pickup.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickup;
-                @Throw.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
-                @Throw.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
-                @Throw.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
-                @HammerAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHammerAttack;
-                @HammerAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHammerAttack;
-                @HammerAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHammerAttack;
+                @PickupOrThrow.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickupOrThrow;
+                @PickupOrThrow.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickupOrThrow;
+                @PickupOrThrow.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPickupOrThrow;
+                @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @SwordAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
                 @SwordAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
                 @SwordAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwordAttack;
                 @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @BindingKey.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
+                @BindingKey.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
+                @BindingKey.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBindingKey;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -315,21 +315,21 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @Pickup.started += instance.OnPickup;
-                @Pickup.performed += instance.OnPickup;
-                @Pickup.canceled += instance.OnPickup;
-                @Throw.started += instance.OnThrow;
-                @Throw.performed += instance.OnThrow;
-                @Throw.canceled += instance.OnThrow;
-                @HammerAttack.started += instance.OnHammerAttack;
-                @HammerAttack.performed += instance.OnHammerAttack;
-                @HammerAttack.canceled += instance.OnHammerAttack;
+                @PickupOrThrow.started += instance.OnPickupOrThrow;
+                @PickupOrThrow.performed += instance.OnPickupOrThrow;
+                @PickupOrThrow.canceled += instance.OnPickupOrThrow;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
                 @SwordAttack.started += instance.OnSwordAttack;
                 @SwordAttack.performed += instance.OnSwordAttack;
                 @SwordAttack.canceled += instance.OnSwordAttack;
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @BindingKey.started += instance.OnBindingKey;
+                @BindingKey.performed += instance.OnBindingKey;
+                @BindingKey.canceled += instance.OnBindingKey;
             }
         }
     }
@@ -337,10 +337,10 @@ public partial class @GameInputSystem : IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnPickup(InputAction.CallbackContext context);
-        void OnThrow(InputAction.CallbackContext context);
-        void OnHammerAttack(InputAction.CallbackContext context);
+        void OnPickupOrThrow(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
         void OnSwordAttack(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnBindingKey(InputAction.CallbackContext context);
     }
 }

@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.System;
+using NOOD;
 
 namespace Game.Player
 {
     public class PlayerVisual : MonoBehaviour
     {
+        [SerializeField] private Player player;
+
         [SerializeField] private Animator anim;
+        [SerializeField] private Animator coverAnim;
+
         [SerializeField] private SpriteRenderer sr;
+        [SerializeField] private SpriteRenderer coverSr;
+
+        private bool isHolding = false;
 
         void Awake()
         {
@@ -16,7 +24,70 @@ namespace Game.Player
 
         void Start()
         {
-            GameInput.GetInstance.OnPlayerMove += Animate;
+            SingletonContainer.Resolve<GameInput>().OnPlayerMove += Animate;
+        }
+
+        public int GetSortingLayer()
+        {
+            return sr.sortingOrder;
+        }
+
+        public void Throw()
+        {
+            anim.SetTrigger("Throw");
+        }
+
+        public void SetCoverActivation(bool isActive)
+        {
+            coverAnim.gameObject.SetActive(isActive);
+        }
+
+        public void ActiveCoverSwordAttack()
+        {
+            SetCoverActivation(true);
+            anim.SetBool("AttackSword", true);
+            coverAnim.SetBool("AttackSword", true);
+            coverAnim.SetInteger("UpSideDown", (int) player.GetFaceDirection().y);
+
+            float attackTime = player.GetSwordAttackTime();
+            NoodyCustomCode.StartDelayFunction(() => 
+            { 
+                SetCoverActivation(false); 
+                anim.SetBool("AttackSword", false);
+                coverAnim.SetBool("AttackSword", false);
+                player.SetIsAttacking(false);
+            }, attackTime);
+        }
+
+        public void SetIsHolding(bool isHolding)
+        {
+            SetCoverActivation(isHolding);
+            this.isHolding = isHolding;
+            anim.SetBool("IsHolding", isHolding);
+            coverAnim.SetBool("IsHolding", isHolding);
+        }
+
+        public void SetIsWalking(bool isWalking)
+        {
+            anim.SetBool("IsWalking", isWalking);
+            if(isHolding)
+            {
+                coverAnim.SetBool("IsWalking", isWalking);
+            }
+        }
+
+        private void FlipX(bool isLeft)
+        {
+            Vector3 scale = this.transform.parent.transform.localScale;
+            if(isLeft)
+            {
+                scale.x = 1;
+            }
+            else
+            {
+                scale.x = -1;
+            }
+            this.transform.parent.transform.localScale = scale;
         }
 
         private void Animate(object sender, Vector2 playerInput)
@@ -24,20 +95,41 @@ namespace Game.Player
             // Normal movement
             if(playerInput == Vector2.zero)
             {
-                anim.SetBool("IsWalking", false);
+                SetIsWalking(false);
             }
             else
             {
-                anim.SetBool("IsWalking", true);
+                SetIsWalking(true);
             }
 
-            // Side the player sprite
-            if(playerInput.x > 0) sr.flipX = true;
-            else if(playerInput.x < 0) sr.flipX = false;
-            if(playerInput.y != 0f)
+            // Side the player sprite left right
+            if(playerInput.x < 0)
+            {
+                FlipX(true);
+                if(isHolding)
+                {
+                    SetIsHolding(true);
+                }
+            }
+            else if(playerInput.x > 0)
+            {
+                FlipX(false);
+                if(isHolding)
+                {
+                    SetIsHolding(true);
+                }
+            }
+
+            // Side player sprite up down
+            if(playerInput != Vector2.zero)
+            {
                 anim.SetInteger("UpSideDown", (int) playerInput.y);
-            else if(playerInput.x != 0)
-                anim.SetInteger("UpSideDown", 0);
+                if(coverAnim.enabled == true)
+                    coverAnim.SetInteger("UpSideDown", (int)playerInput.y);
+
+                if(playerInput.y != 0 && playerInput.x == 0 && player.GetIsAttacking() == false)
+                    SetCoverActivation(false);
+            }
         }
     }
 }

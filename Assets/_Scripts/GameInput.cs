@@ -6,13 +6,14 @@ using UnityEngine.InputSystem;
 
 namespace Game.System
 {
-    public class GameInput : NOOD.MonoBehaviorInstance<GameInput>
+    public class GameInput : MonoBehaviour, ISingleton
     {
         public EventHandler<Vector2> OnPlayerMove;
         public GameInputSystem gameInputSystem;
 
         private void Awake() 
         {
+            RegisterToContainer();
             gameInputSystem = new GameInputSystem();
             gameInputSystem.Player.Enable();
 
@@ -27,5 +28,15 @@ namespace Game.System
             Vector2 direction = gameInputSystem.Player.Move.ReadValue<Vector2>();
             OnPlayerMove?.Invoke(this, direction);
         }   
+
+        public void RegisterToContainer()
+        {
+            SingletonContainer.Register(this);
+        }
+
+        public void UnRegisterFromContainer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

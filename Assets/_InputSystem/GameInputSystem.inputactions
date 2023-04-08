@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pickup",
+                    "name": "PickupOrThrow",
                     "type": "Button",
                     "id": "890d6165-552a-48df-8eeb-776ea28a8d45",
                     "expectedControlType": "Button",
@@ -24,16 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Throw",
-                    "type": "Button",
-                    "id": "a0267975-8b6b-46d4-8b44-15763062f281",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "HammerAttack",
+                    "name": "Shoot",
                     "type": "Button",
                     "id": "b9d6b093-f2ce-4b54-93a1-b14c8951fbe3",
                     "expectedControlType": "Button",
@@ -54,6 +45,15 @@
                     "name": "Dash",
                     "type": "Button",
                     "id": "18b2abf2-0c2e-443b-b211-388ccefd27d2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BindingKey",
+                    "type": "Button",
+                    "id": "0f1b1240-68ae-4876-a8ab-c182e3fed0c2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -119,22 +119,11 @@
                 {
                     "name": "",
                     "id": "fd0420c7-5041-4925-bca0-b7bd1d7f9b25",
-                    "path": "<Keyboard>/j",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pickup",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68d96eae-4e67-490e-866c-9fa049d960a5",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Throw",
+                    "action": "PickupOrThrow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -145,14 +134,14 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HammerAttack",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "a78c8a1f-02e2-4ad3-93cd-5e71a24aee63",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -168,6 +157,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "451cf9e0-cf3f-4b1a-ac00-e807c1de254a",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BindingKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -51,7 +51,7 @@
         "ProjectSettings/":true,
         "temp/":true,
         "Temp/":true,
-        "*.csproj": false
+        "*.csproj": true
     },
     "cSpell.words": [
         "NOOD"
