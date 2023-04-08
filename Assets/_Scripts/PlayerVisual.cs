@@ -55,6 +55,7 @@ namespace Game.Player
                 SetCoverActivation(false); 
                 anim.SetBool("AttackSword", false);
                 coverAnim.SetBool("AttackSword", false);
+                player.SetIsAttacking(false);
             }, attackTime);
         }
 
@@ -126,7 +127,7 @@ namespace Game.Player
                 if(coverAnim.enabled == true)
                     coverAnim.SetInteger("UpSideDown", (int)playerInput.y);
 
-                if(playerInput.y != 0 && playerInput.x == 0)
+                if(playerInput.y != 0 && playerInput.x == 0 && player.GetIsAttacking() == false)
                     SetCoverActivation(false);
             }
         }

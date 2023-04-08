@@ -93,6 +93,7 @@ namespace Game.Player
         //--- Custom Functions ---//
         private void Move(object sender, Vector2 movement)
         {
+            if(isAttacking) return;
             Vector3 playerMovement = new Vector3(movement.x, movement.y, 0);
             this.transform.position += playerMovement * speed * Time.deltaTime;
             moveDirection = movement;
@@ -147,6 +148,11 @@ namespace Game.Player
         public void SetIsAttacking(bool isAttacking)
         {
             this.isAttacking = isAttacking;
+        }
+
+        public bool GetIsAttacking()
+        {
+            return this.isAttacking;
         }
 
         private void SetIsHoldingTrue()

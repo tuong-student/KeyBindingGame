@@ -52,7 +52,7 @@ namespace Game.Item
                 if (isHolding)
                 {
                     SetIsCarry(true);
-                    if (movement.y > 0)
+                    if (movement.y > 0 && movement.x == 0)
                     {
                         sr.sortingOrder = player.PLAYER_LAYER - 1;
                     }

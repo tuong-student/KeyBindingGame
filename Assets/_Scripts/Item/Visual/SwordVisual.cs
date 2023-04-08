@@ -42,7 +42,17 @@ namespace Game.Item
             }
 
             anim.SetTrigger("Attack");
-            NOOD.NoodyCustomCode.StartDelayFunction(() => { sr.sortingOrder = player.PLAYER_LAYER - 1; }, GetAttackTime());
+            NOOD.NoodyCustomCode.StartDelayFunction(() => 
+            { 
+                if(faceDirection.y > 0 && faceDirection.x == 0)
+                {
+                    sr.sortingOrder = player.PLAYER_LAYER + 1;
+                } 
+                else
+                {
+                    sr.sortingOrder = player.PLAYER_LAYER - 1;
+                }
+            }, GetAttackTime());
         }
 
         public float GetAttackTime()
@@ -50,7 +60,8 @@ namespace Game.Item
             return 0.5833334f;
         }
 
-        private void SetFaceDirection(object sender, Vector2 direction) { if(direction != Vector2.zero)
+        private void SetFaceDirection(object sender, Vector2 direction) { 
+            if(direction != Vector2.zero && player.GetIsAttacking() == false)
             {
                 if(direction.x == 0)
                 {
